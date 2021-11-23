@@ -4,12 +4,11 @@ const zdf = @import("zdf");
 const stdout = std.io.getStdOut().writer();
 
 fn usage() !void {
-    try stdout.writeAll("Usage: runc [-q] \"source code\"");
+    try stdout.writeAll("Usage: runc [-q] \"source code\"\n");
 }
 
 fn help() !void {
-    try stdout.writeAll("Usage: runc [-q] \"source code\"");
-    try stdout.writeAll("\n");
+    try stdout.writeAll("Usage: runc [-q] \"source code\"\n");
     try stdout.writeAll("\n");
     try stdout.writeAll("Options:\n");
     try stdout.writeAll("  -q\t\t\t Quick mode: the source code is placed directly inside a builtin main funcion.\n");
