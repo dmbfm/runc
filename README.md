@@ -18,10 +18,14 @@ zig build -Drelease-safe
 
 ## Usage
 ``` 
-Usage: runc [-q] "source code"
+Usage: runc [-q] [-{d|f|i}m] [-k] "source code"
 
 Options:
   -q                     Quick mode: the source code is placed directly inside a builtin main funcion.
+  -dm                    Math mode (double): evaluates the expression and prints the result.
+  -fm                    Math mode (float)
+  -im                    Math mode (int)
+  -k                     Keep the generated source file. (the filename is "runc_[somenumber].c"
 ```
 
 Just pass your C code inside single or double quotes as the last argument to `runc`:

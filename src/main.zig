@@ -4,14 +4,18 @@ const zdf = @import("zdf");
 const stdout = std.io.getStdOut().writer();
 
 fn usage() !void {
-    try stdout.writeAll("Usage: runc [-q] \"source code\"\n");
+    try stdout.writeAll("Usage: runc [-q] [-{d|f|i}m] [-k] \"source code\"\n");
 }
 
 fn help() !void {
-    try stdout.writeAll("Usage: runc [-q] \"source code\"\n");
+    try usage();
     try stdout.writeAll("\n");
     try stdout.writeAll("Options:\n");
     try stdout.writeAll("  -q\t\t\t Quick mode: the source code is placed directly inside a builtin main funcion.\n");
+    try stdout.writeAll("  -dm\t\t\t Math mode (double): evaluates the expression and prints the result.\n");
+    try stdout.writeAll("  -fm\t\t\t Math mode (float)\n");
+    try stdout.writeAll("  -im\t\t\t Math mode (int)\n");
+    try stdout.writeAll("  -k\t\t\t Keep the generated source file. (the filename is \"runc_[somenumber].c\"\n");
 }
 
 const header =
@@ -35,15 +39,27 @@ const body_quick_after =
     \\
 ;
 
+const Mode = union(enum) {
+    Normal: void,
+    Quick: void,
+    Math: enum {
+        Float,
+        Double,
+        Int,
+    },
+};
+
 const State = struct {
     srcFilename: []const u8 = undefined,
     outFilename: []const u8 = undefined,
     srcWritten: bool = false,
     outWritten: bool = false,
+    mode: Mode = .Normal,
+    keepSource: bool = false,
 };
 
 fn cleanFiles(s: *State) !void {
-    if (s.srcWritten) {
+    if (s.srcWritten and !s.keepSource) {
         try std.fs.cwd().deleteFile(s.srcFilename);
     }
 
@@ -72,9 +88,27 @@ pub fn main() anyerror!void {
         return;
     }
 
-    var quick = args.has("-q");
-    var source = args.argv[args.argc - 1];
     var state = State{};
+
+    var quick = args.has("-q");
+    var mathFloat = args.has("-fm");
+    var mathDouble = args.has("-dm");
+    var mathInt = args.has("-im");
+    state.keepSource = args.has("-k");
+
+    if (quick) {
+        state.mode = .Quick;
+    } else if (mathDouble) {
+        state.mode = .{ .Math = .Double };
+    } else if (mathFloat) {
+        state.mode = .{ .Math = .Float };
+    } else if (mathInt) {
+        state.mode = .{ .Math = .Int };
+    } else {
+        state.mode = .Normal;
+    }
+
+    var source = args.argv[args.argc - 1];
 
     if (source[0] == '-') {
         try usage();
@@ -87,14 +121,33 @@ pub fn main() anyerror!void {
 
     try sourceFile.writeAll(header);
 
-    if (quick) {
-        try sourceFile.writeAll(body_quick_pre);
-    }
-
-    try sourceFile.writeAll(source);
-
-    if (quick) {
-        try sourceFile.writeAll(body_quick_after);
+    switch (state.mode) {
+        .Normal => {
+            try sourceFile.writeAll(source);
+        },
+        .Quick => {
+            try sourceFile.writeAll(body_quick_pre);
+            try sourceFile.writeAll(source);
+            try sourceFile.writeAll(body_quick_after);
+        },
+        .Math => |mathMode| {
+            try sourceFile.writeAll("#include<math.h>\nint main(){\n");
+            var varString = switch (mathMode) {
+                .Double => "double x = ",
+                .Float => "float x = ",
+                .Int => "int x = ",
+            };
+            var formatString = switch (mathMode) {
+                .Double => "%f",
+                .Float => "%f",
+                .Int => "%d",
+            };
+            try sourceFile.writeAll(varString);
+            try sourceFile.writeAll(source);
+            try sourceFile.writeAll(";\n printf(\"");
+            try sourceFile.writeAll(formatString);
+            try sourceFile.writeAll("\\n\",x);\n return 0; \n }");
+        },
     }
 
     sourceFile.close();
