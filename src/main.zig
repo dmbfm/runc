@@ -4,7 +4,15 @@ const zdf = @import("zdf");
 const stdout = std.io.getStdOut().writer();
 
 fn usage() !void {
-    try stdout.writeAll("Usage: runc \"[source code]\"");
+    try stdout.writeAll("Usage: runc [-q] \"source code\"");
+}
+
+fn help() !void {
+    try stdout.writeAll("Usage: runc [-q] \"source code\"");
+    try stdout.writeAll("\n");
+    try stdout.writeAll("\n");
+    try stdout.writeAll("Options:\n");
+    try stdout.writeAll("  -q\t\t\t Quick mode: the source code is placed directly inside a builtin main funcion.\n");
 }
 
 const header =
@@ -57,6 +65,11 @@ pub fn main() anyerror!void {
 
     if (args.argc < 2) {
         try usage();
+        return;
+    }
+
+    if (args.has("-h") or args.has("--help")) {
+        try help();
         return;
     }
 
