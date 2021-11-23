@@ -39,6 +39,13 @@ The `-q` flag enabled the quick mode, where the code is placed directly inside a
 runc -q 'printf("Hello!\n");'
 ```
 
+Using the `-{d|f|i}m` math modes you can output the result of a mathematical expression:
+``` 
+runc -dm '2 * sin(1.23 * cos(0.21))'
+
+1.866228
+```
+
 ## C Headers
 
 Currently `runc` inserts the following C headers before the user-provided source-code:
