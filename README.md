@@ -17,6 +17,12 @@ zig build -Drelease-safe
 ```
 
 ## Usage
+``` 
+Usage: runc [-q] "source code"
+
+Options:
+  -q                     Quick mode: the source code is placed directly inside a builtin main funcion.
+```
 
 Just pass your C code inside single or double quotes as the last argument to `runc`:
 ``` 
