@@ -1,0 +1,3 @@
+[submodule "src/zdf"]
+	path = src/zdf
+	url = git@github.com:dmbfm/zdf.git

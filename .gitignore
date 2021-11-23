@@ -1,0 +1,5 @@
+# Zig magic stuff
+/zig-cache
+/zig-out
+debug
+release
