@@ -8,7 +8,7 @@ You need to have [Zig](https://ziglang.org/) installed to build this tool and cl
 
 ## Installation
 
-After you have [Zig](https://ziglang.org/download/) installed and up and running, just type in:
+After you have Zig [installed](https://ziglang.org/download/) and up and running, just type in:
 ```
 git clone --recurse-submodules https://github.com/dmbfm/runc.git
 cd runc

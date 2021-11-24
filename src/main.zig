@@ -11,11 +11,11 @@ fn help() !void {
     try usage();
     try stdout.writeAll("\n");
     try stdout.writeAll("Options:\n");
-    try stdout.writeAll("  -q\t\t\t Quick mode: the source code is placed directly inside a builtin main funcion.\n");
-    try stdout.writeAll("  -dm\t\t\t Math mode (double): evaluates the expression and prints the result.\n");
-    try stdout.writeAll("  -fm\t\t\t Math mode (float)\n");
-    try stdout.writeAll("  -im\t\t\t Math mode (int)\n");
-    try stdout.writeAll("  -k\t\t\t Keep the generated source file. (the filename is \"runc_[somenumber].c\"\n");
+    try stdout.writeAll("  -q  \t\t\t Quick mode: the source code is placed directly inside a builtin main funcion.\n");
+    try stdout.writeAll("  -dm \t\t\t Math mode (double): evaluates the expression and prints the result.\n");
+    try stdout.writeAll("  -fm \t\t\t Math mode (float).\n");
+    try stdout.writeAll("  -im \t\t\t Math mode (int).\n");
+    try stdout.writeAll("  -k  \t\t\t Keep the generated source file. (the filename is \"runc_[somenumber].c.\"\n");
 }
 
 const header =
