@@ -12,9 +12,9 @@ After you have Zig [installed](https://ziglang.org/download/) and up and running
 ```
 git clone --recurse-submodules https://github.com/dmbfm/runc.git
 cd runc
-zig build -Drelease-safe
-./zig-out/bin/runc "int main(){ printf(\"runc!\"); return 0;}"
+zig build -Drelease-safe --prefix ~/.local
 ```
+to install `runc` to `~/.local/bin`.
 
 ## Usage
 ``` 
